@@ -6,12 +6,16 @@
 
 QT       -= core gui
 
-TARGET = lsdSlamUtil
-TEMPLATE = lib
+TARGET      = lsdSlamUtil
+TEMPLATE    = lib
 
 CONFIG += c++11
 
 DEFINES += LSDSLAMUTIL_LIBRARY
+
+#QMAKE_CFLAGS_DEBUG    += -pg
+#QMAKE_CXXFLAGS_DEBUG  += -pg
+#QMAKE_LFLAGS_DEBUG    += -pg
 
 SOURCES += \
     SophusUtil.cpp \
@@ -44,22 +48,24 @@ unix {
     LIBS    += -lopencv_imgcodecs   -lopencv_highgui
     LIBS    += -lopencv_features2d  -lopencv_calib3d
 
-    INCLUDEPATH += /home/sergey/libs/Sophus
+#    INCLUDEPATH += /home/sergey/libs/Sophus
 
-    INCLUDEPATH +=  /home/sergey/MyProject/MySlamProject/Qt/lsdSlamIO/
-    LIBS        +=  -L/home/sergey/MyProject/MySlamProject/Qt/FullProject/build/lsdSlamIO     \
+    BASE_LIBS_PATH = $$PWD/../build
+
+    INCLUDEPATH +=  ../lsdSlamIO/
+    LIBS        +=  -L$$BASE_LIBS_PATH/lsdSlamIO     \
                     -llsdSlamIO
 
-    INCLUDEPATH += /home/sergey/MyProject/MySlamProject/Qt/lsdSlamFrame/
-    LIBS        +=  -L/home/sergey/MyProject/MySlamProject/Qt/FullProject/build/lsdSlamFrame  \
+    INCLUDEPATH +=  ../lsdSlamFrame/
+    LIBS        +=  -L$$BASE_LIBS_PATH/lsdSlamFrame  \
                     -llsdSlamFrame
 
-    INCLUDEPATH += /home/sergey/MyProject/MySlamProject/Qt/lsdSlamGlobalMapping/
-    LIBS        +=  -L/home/sergey/MyProject/MySlamProject/Qt/FullProject/build/lsdSlamGlobalMapping  \
-                    -llsdSlamGlobalMapping
+    INCLUDEPATH +=  ../lsdSlamGlobalMapping/
+    LIBS        +=  -L$$BASE_LIBS_PATH/lsdSlamGlobalMapping  \
+#                    -llsdSlamGlobalMapping
 
 
     #target.path = /usr/lib
-    target.path = /home/sergey/MyProject/MySlamProject/lsdSlamSharedLibs
+    target.path = $$BASE_LIBS_PATH/lsdSlamApp
     INSTALLS += target
 }
