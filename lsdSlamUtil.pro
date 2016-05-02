@@ -25,7 +25,7 @@ SOURCES += \
 
 HEADERS += \
     EigenCoreInclude.h \
-    IndexThreadReduce.h \
+#    IndexThreadReduce.h \
     settings.h \
     SophusUtil.h \
     globalFuncs.h \

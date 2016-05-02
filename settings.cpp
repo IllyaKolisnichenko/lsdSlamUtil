@@ -23,8 +23,6 @@
 #include <opencv2/opencv.hpp>
 #include <boost/bind.hpp>
 
-
-
 namespace lsd_slam
 {
 RunningStats runningStats;
@@ -32,7 +30,7 @@ RunningStats runningStats;
 bool autoRun            = true;
 bool autoRunWithinFrame = true;
 
-int debugDisplay = 0;
+int  debugDisplay = 0;
 
 bool onSceenInfoDisplay         = true;
 bool displayDepthMap            = true;
