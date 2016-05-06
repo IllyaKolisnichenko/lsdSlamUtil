@@ -30,62 +30,99 @@ namespace lsd_slam
 
 namespace Util
 {
-    // Структура для описания изображения ()
+    // The structure that describes image
 	struct DisplayImageObect
 	{
-        // Непорседственно отображение OpenCV
+        // OpenCV image presentation
         cv::Mat     img;
-        // Имя изображения
+
+        // The name of the image
 		std::string name;
-        // Флаг автоматического размера ( кто его устанавливает )
+
+        // Flag for autosize
         bool        autoSize;
 	};
 
+    /**
+     * @brief displayImage
+     *
+     * Image display function working on different platforms.
+     * On Android, the window name is ignored as all images are output fullscreen.
+     *
+     * @param windowName
+     * @param image
+     * @param autoSize
+     */
+    void displayImage(  const char*     windowName      ,
+                        const cv::Mat&  image           ,
+                                bool    autoSize = true     );
 
-/// Image display function working on different platforms.
-/// On Android, the window name is ignored as all images are output fullscreen.
-void displayImage(  const char*     windowName      ,
-                    const cv::Mat&  image           ,
-                            bool    autoSize = true     );
+    /**
+     * @brief displayImage
+     *
+     * Convenience function which internally converts the image to a cv::Mat
+     *
+     * @param windowName
+     * @param image
+     * @param width
+     * @param height
+     */
+    inline void displayImage(   const char*     windowName  ,
+                                const float*    image       ,
+                                    int         width       ,
+                                    int         height          )
+    {
+        // Put data to OpenCV matrix
+        cv::Mat floatWrapper    ( height                    ,
+                                  width                     ,
+                                  CV_32F                    ,
+                                  const_cast<float*>(image)     );
 
-/// Convenience function which internally converts the image to a cv::Mat
-inline void displayImage(   const char*     windowName  ,
-                            const float*    image       ,
-                                int         width       ,
-                                int         height          )
-{
-    // Пакуем данные в матрицу OpenCV
-    cv::Mat floatWrapper    ( height                    ,
-                              width                     ,
-                              CV_32F                    ,
-                              const_cast<float*>(image)     );
-    // Создаем буфер для черно-белго изображения
-    cv::Mat tempImage       ( height, width, CV_8UC1);
+        // Create buffer for greyscale image
+        cv::Mat tempImage       ( height, width, CV_8UC1);
 
-    // Преобразовать буффер в изображение
-    floatWrapper.convertTo  ( tempImage, CV_8UC1 );
+        // Convert the buffer to the image
+        floatWrapper.convertTo  ( tempImage, CV_8UC1 );
 
-    // Преобразовать изображение в цветное
-    cv::cvtColor( tempImage,    tempImage, CV_GRAY2RGB);
+        // Convert the image to colored
+        cv::cvtColor( tempImage,    tempImage, CV_GRAY2RGB);
 
-    // Показать изображение
-    displayImage( windowName,   tempImage );
-}
+        // Display the image s
+        displayImage( windowName,   tempImage );
+    }
 
-/// Waits for key input at most the given amount of milliseconds and returns the keycode.
-/// If milliseconds is zero, waits until a key is pressed.
-/// This may be a no-op on some platforms (e.g. Android).
-/// A window shown with displayImage must be active for this to work.
-int waitKey(int milliseconds);
+    /**
+     * @brief waitKey
+     *
+     * Waits for key input at most the given amount of milliseconds and returns the keycode.
+     * If milliseconds is zero, waits until a key is pressed.
+     * This may be a no-op on some platforms (e.g. Android).
+     * A window shown with displayImage must be active for this to work.
+     *
+     * @param milliseconds
+     * @return
+     */
+    int waitKey(int milliseconds);
 
-/// Just like waitKey(), but does not consume the pressed key, so that the next
-/// call to waitKey() will still return this key (as long as no other key is
-/// pressed in between).
-int waitKeyNoConsume(int milliseconds);
+    /**
+     * @brief waitKeyNoConsume
+     *
+     * Just like waitKey(), but does not consume the pressed key, so that the next
+     * call to waitKey() will still return this key (as long as no other key is
+     * pressed in between).
+     *
+     * @param milliseconds
+     * @return
+     */
+    int waitKeyNoConsume(int milliseconds);
 
-// Закрывает все окна
-void closeAllWindows();
+    /**
+     * @brief closeAllWindows
+     *
+     * Close all windows
+     */
+    void closeAllWindows();
 
-}
+    }
 
 }
