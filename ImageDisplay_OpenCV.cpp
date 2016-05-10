@@ -32,88 +32,94 @@ namespace lsd_slam
 
 namespace Util
 {
-    // Флаг использования потока
+    // Flag of thread usage
 	const bool useImageDisplayThread = true;
 
-    // Неупорядоченный список открытых окон, описанных std::string
+    // Indigested list of all opened windows described as std::string
     std::unordered_set<std::string> openWindows;
 
-    // Обеспечивает потокобезопасность данных
+    // Provide data thread safety
     boost::mutex                    openCVdisplayMutex;
-    // Условная переменная ( наверное, генерирует сигнал )
+
+    // Conditional variable (probably it generates the signal)
     boost::condition_variable       openCVdisplaySignal;
 
-    // Указатель на поток ( найти инициализацию!!! )
+    // Pointer to the thread
     boost::thread*                  imageDisplayThread = 0;
 
-    // Массив изображений
+    // Array of images
     std::vector<DisplayImageObect>  displayQueue;
 
-    // Изменение значения вызывает остановку потока и закрытие окон
+    // Changing of value causes thread stop and all windows closing
     bool imageThreadKeepRunning     = true;
 
-// Функция вызывается в цикле потока
+// Function is called in the thread loop
 void displayThreadLoop()
 {
-    // Сообщает о запуске потока
+    // Notify that thread is started
 	printf("started image display thread!\n");
 
-    // Устанавливает мютекс для потока ??
+    // Set the mutex for the thread ???
     boost::unique_lock<boost::mutex> lock( openCVdisplayMutex );
 
-    // Пока необходим поток изображений
+    // While we need threads of images
 	while(imageThreadKeepRunning)
 	{
-        // Останавливает поток до получения новых данных
+        // Stop the thread until we receive new data
         openCVdisplaySignal.wait( lock );
 
-        // Если требуется остановить поток
+        // If we need to pause the thread
 		if(!imageThreadKeepRunning)
-            // Прервать цикл
+
+            // Break the loop
 			break;
 
-        // Если очередь не пустая
+        // If the queue is not empty
 		while(displayQueue.size() > 0)
 		{
-            // Если последний элемент не требует autosize
+            // If last element doesn't require autoSize
             if( !displayQueue.back().autoSize )
 			{
-                // Если имени еще нет в списке ???
+                // If the name is still not in the list
                 if( openWindows.find( displayQueue.back().name ) == openWindows.end() )
 				{
-                    // Создаем какоето окно ???
+                    // Create the window ??
                     cv::namedWindow ( displayQueue.back().name, cv::WINDOW_NORMAL );
 
                     cv::resizeWindow( displayQueue.back().name,
                                       displayQueue.back().img.cols,
                                       displayQueue.back().img.rows  );
 
-                    // Добавить в вектор
+                    // Add to the vector
                     openWindows.insert(displayQueue.back().name);
 				}
 			}
-            // Показать окно
+
+            // Show the window
             cv::imshow( displayQueue.back().name, displayQueue.back().img );
-            // удалить обработанную структуру из очереди
+
+            // Delete the strcture from the queue
 			displayQueue.pop_back();
 		}
 	}
 
-    // Удалить все окна
+    // Delete all the windows
 	cv::destroyAllWindows();
-    // Очистить вектор
+
+    // Clear the vector
 	openWindows.clear();
 
-    // Сообщить об окончании потока
+    // Notify that thread is finished
 	printf("ended image display thread!\n");
 }
 
-// Создать поток изображений
+// Create the image thread
 void makeDisplayThread()
 {
-    // Разрешить поток изображений
+    // Allow the thread of images
     imageThreadKeepRunning  = true;
-    // Запустить функцию в потоке
+
+    // Run function in the thread
     imageDisplayThread      = new boost::thread(&displayThreadLoop);
 }
 
@@ -121,28 +127,29 @@ void displayImage(const char* windowName, const cv::Mat& image, bool autoSize)
 {
 	if(useImageDisplayThread)
 	{
-        // Если поток еще небыл запущен
+        // If thread wasn't started yet
 		if(imageDisplayThread == 0)
-            // Запустить поток
+
+            // Run the thread
 			makeDisplayThread();
 
-        // Заблокировать доступ к данным
+        // Lock an access to the data
 		boost::unique_lock<boost::mutex> lock(openCVdisplayMutex);
-        // Добавить новый экземпляра объекта изображения
+
+        // Add new instance of the image object
 		displayQueue.push_back(DisplayImageObect());
 
-        // Установить прпаметры нового объекта
+        // Install parameters of the new object
         displayQueue.back().autoSize    = autoSize;
         displayQueue.back().img         = image.clone();
         displayQueue.back().name        = windowName;
 
-        // Если есть потоки, ожидающие расблокировки
-        // Расблокируется один из ожидающих
+        // If there are thread that are waiting for being unlocked than one of them will be unlocked
 		openCVdisplaySignal.notify_one();
 	}
 	else
 	{
-        // Если параметр не установлен
+        //  If parameter is not set
 		if(!autoSize)
 		{
 			if(openWindows.find(windowName) == openWindows.end())
@@ -160,7 +167,7 @@ void displayImage(const char* windowName, const cv::Mat& image, bool autoSize)
 
 int waitKey(int milliseconds)
 {
-    // Ожидает нажатие кнопок
+    // Waiting for pressing buttons
 	return cv::waitKey(milliseconds);
 }
 
@@ -172,40 +179,42 @@ int waitKeyNoConsume(int milliseconds)
 
 void closeAllWindows()
 {
-    // Заблокировать доступ к данным
+    // Lock an access to the data
 	boost::unique_lock<boost::mutex> lock(openCVdisplayMutex);
 
 	if(useImageDisplayThread)
 	{
-        // Если поток запущен
+        // If thread is running
 		if(imageDisplayThread != 0)
 		{
-            // Останавливаем поток
+            // Stop the thread
 			imageThreadKeepRunning = false;
-            // Сообщить всем ожидающим освобождения
+
+            // Notify all
 			openCVdisplaySignal.notify_all();
 
-            // Сообщаем, что ожиданием окончания остановки
+            // Message "Thread finish"
 			printf("waiting for image display thread to end!\n");
 
-            // Освододить мютекс
+            // Unlock the mutex
 			lock.unlock();
 
             // ???
 			imageDisplayThread->join();
 
-            // Сообщаем об окончание потока
+            // Notify that thread is finished
 			printf("done waiting for image display thread to end!\n");
 
-            // Обнулить указатель
+            // Null the pointer
 			imageDisplayThread = 0;
 		}
 	}
 	else
 	{
-        // Очистить окна
+        // Destroy all the windows
 		cv::destroyAllWindows();
-        // Очистить очередь
+
+        // Clear the queue
 		openWindows.clear();
 	}
 }
