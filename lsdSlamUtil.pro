@@ -38,21 +38,27 @@ HEADERS += \
 unix {
 
     # OpenCV
-    OPENCV_INCLUDE_PATH        = /home/sergey/libs/opencv-3.0.0/include
-    OPENCV_INCLUDE_MODULE_PATH = /home/sergey/libs/opencv-3.0.0/release/modules
+#    OPENCV_INCLUDE_PATH        = /home/sergey/libs/opencv-3.0.0/include
+#    OPENCV_INCLUDE_MODULE_PATH = /home/sergey/libs/opencv-3.0.0/release/modules
 
-    OPENCV_LIBS_PATH           = /home/sergey/libs/opencv-3.0.0/release/lib
+#    OPENCV_LIBS_PATH           = /home/sergey/libs/opencv-3.0.0/release/lib
 
-    message( " Unix - Version OpenCV - 3.00 - Release " )
-    message( $$OPENCV_LIBS_PATH )
+#    message( " Unix - Version OpenCV - 3.00 - Release " )
+#    message( $$OPENCV_LIBS_PATH )
 
-    LIBS    += -L$$OPENCV_LIBS_PATH
+##    LIBS    += -L$$OPENCV_LIBS_PATH
+    LIBS    += -L/usr/local/lib
+
     LIBS    += -lopencv_objdetect   -lopencv_imgproc
     LIBS    += -lopencv_videoio     -lopencv_core
-    LIBS    += -lopencv_imgcodecs   -lopencv_highgui
-    LIBS    += -lopencv_features2d  -lopencv_calib3d
+    LIBS    += -lopencv_highgui
+#    LIBS    += -lopencv_features2d  -lopencv_calib3d
+#    LIBS    += -lopencv_imgcodecs
 
 #    INCLUDEPATH += /home/sergey/libs/Sophus
+
+    PKGCONFIG = gtk+-2.0
+    CONFIG += link_pkgconfig
 
     BASE_LIBS_PATH = $$PWD/../build
 
