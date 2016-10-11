@@ -25,7 +25,8 @@
 #include "settings.h"
 #include "SophusUtil.h"
 
-#include "IOWrapper/TimestampedObject.h"
+//#include "IOWrapper/TimestampedObject.h"
+#include "../lsdSlamIO/include/TimestampedObject.h"
 
 
 namespace lsd_slam

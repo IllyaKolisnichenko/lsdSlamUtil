@@ -33,7 +33,7 @@ namespace lsd_slam
 namespace Util
 {
     // Flag of thread usage
-	const bool useImageDisplayThread = true;
+    const bool useImageDisplayThread = true;
 
     // Indigested list of all opened windows described as std::string
     std::unordered_set<std::string> openWindows;
@@ -70,7 +70,6 @@ void displayThreadLoop()
 
         // If we need to pause the thread
 		if(!imageThreadKeepRunning)
-
             // Break the loop
 			break;
 
@@ -129,7 +128,6 @@ void displayImage(const char* windowName, const cv::Mat& image, bool autoSize)
 	{
         // If thread wasn't started yet
 		if(imageDisplayThread == 0)
-
             // Run the thread
 			makeDisplayThread();
 

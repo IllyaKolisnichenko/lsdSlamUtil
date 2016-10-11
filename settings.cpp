@@ -34,6 +34,7 @@ int  debugDisplay = 0;
 
 bool onSceenInfoDisplay         = true;
 bool displayDepthMap            = true;
+
 bool dumpMap                    = false;
 bool doFullReConstraintTrack    = false;
 
@@ -42,7 +43,9 @@ bool printPropagationStatistics     = false;
 bool printFillHolesStatistics       = false;
 bool printObserveStatistics         = false;
 bool printObservePurgeStatistics    = false;
+
 bool printRegularizeStatistics      = true;
+
 bool printLineStereoStatistics      = false;
 bool printLineStereoFails           = false;
 
@@ -60,10 +63,10 @@ bool printThreadingInfo = true;
 bool printMappingTiming = false;
 bool printOverallTiming = false;
 
-bool plotTrackingIterationInfo      = false;
-bool plotSim3TrackingIterationInfo  = false;
+bool plotTrackingIterationInfo      = true;
+bool plotSim3TrackingIterationInfo  = true;
 bool plotStereoImages               = true;     // ploting stereo image reconstruct
-bool plotTracking                   = false;
+bool plotTracking                   = true;
 
 
 float freeDebugParam1 = 1;

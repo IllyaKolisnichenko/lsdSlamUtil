@@ -34,10 +34,10 @@ HEADERS += \
 unix {
 
     # OpenCV
-    OPENCV_INCLUDE_PATH        = /home/sergey/libs/opencv-3.0.0/include
-    OPENCV_INCLUDE_MODULE_PATH = /home/sergey/libs/opencv-3.0.0/release/modules
+#    OPENCV_INCLUDE_PATH        = /home/sergey/libs/opencv-3.0.0/include
+#    OPENCV_INCLUDE_MODULE_PATH = /home/sergey/libs/opencv-3.0.0/release/modules
 
-    OPENCV_LIBS_PATH           = /home/sergey/libs/opencv-3.0.0/release/lib
+#    OPENCV_LIBS_PATH           = /home/sergey/libs/opencv-3.0.0/release/lib
 
     message( " Unix - Version OpenCV - 3.00 - Release " )
     message( $$OPENCV_LIBS_PATH )
