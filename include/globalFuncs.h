@@ -116,6 +116,7 @@ inline Eigen::Vector2f getInterpolatedElement42(const Eigen::Vector4f* const mat
 	        + (dx-dxdy) * *(const Eigen::Vector2f*)(bp+1)
 			+ (1-dx-dy+dxdy) * *(const Eigen::Vector2f*)(bp);
 }
+
 inline void fillCvMat(cv::Mat* mat, cv::Vec3b color)
 {
 	for(int y=0;y<mat->size().height;y++)

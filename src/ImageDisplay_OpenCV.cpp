@@ -82,7 +82,7 @@ void displayThreadLoop()
                 // If the name is still not in the list
                 if( openWindows.find( displayQueue.back().name ) == openWindows.end() )
 				{
-                    // Create the window ??
+                    // Create the window
                     cv::namedWindow ( displayQueue.back().name, cv::WINDOW_NORMAL );
 
                     cv::resizeWindow( displayQueue.back().name,
@@ -117,7 +117,6 @@ void makeDisplayThread()
 {
     // Allow the thread of images
     imageThreadKeepRunning  = true;
-
     // Run function in the thread
     imageDisplayThread      = new boost::thread(&displayThreadLoop);
 }
@@ -152,15 +151,16 @@ void displayImage(const char* windowName, const cv::Mat& image, bool autoSize)
 		{
 			if(openWindows.find(windowName) == openWindows.end())
 			{
-                cv::namedWindow (windowName, cv::WINDOW_NORMAL);
-				cv::resizeWindow(windowName, image.cols, image.rows);
+               cv::namedWindow ( windowName, cv::WINDOW_NORMAL     );
+               cv::resizeWindow( windowName, image.cols, image.rows);
 
 				openWindows.insert(windowName);
 			}
 		}
-		cv::imshow(windowName, image);
+        cv::imshow(windowName, image);
 	}
-	//cv::waitKey(1);
+
+//    cv::waitKey(1);
 }
 
 int waitKey(int milliseconds)

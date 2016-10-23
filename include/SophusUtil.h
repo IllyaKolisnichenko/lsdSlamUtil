@@ -26,22 +26,22 @@
 // Typedef and conversion macro for Eigen matrices to currently used type.
 // NOTE: a "no-op conversion" is free in terms of performance, as it should be compiled out.
 #ifdef SOPHUS_USE_FLOAT
-	typedef Sophus::SE3f SE3;
-	typedef Sophus::Sim3f Sim3;
-	typedef Sophus::SO3f SO3;
-	#define toSophus(x) ((x).cast<float>())
-	#define sophusType float
+    typedef Sophus::SE3f    SE3;
+    typedef Sophus::Sim3f   Sim3;
+    typedef Sophus::SO3f    SO3;
+    #define toSophus(x)     ((x).cast<float>())
+    #define sophusType      float
 #else
 //	typedef Sophus::Vector3d Vector3;
 //	typedef Sophus::Vector4d Vector4;
 //	typedef Sophus::Vector6d Vector6;
 //	typedef Sophus::Vector7d Vector7;
 //	typedef Sophus::Quaterniond Quaternion;
-	typedef Sophus::SE3d SE3;
-	typedef Sophus::Sim3d Sim3;
-	typedef Sophus::SO3d SO3;
-	#define toSophus(x) ((x).cast<double>())
-	#define sophusType double
+    typedef Sophus::SE3d    SE3;
+    typedef Sophus::Sim3d   Sim3;
+    typedef Sophus::SO3d    SO3;
+    #define toSophus(x)     ((x).cast<double>())
+    #define sophusType      double
 #endif
 
 
@@ -67,8 +67,8 @@ inline SE3 se3FromSim3(const Sim3& sim3)
 extern template class Eigen::Quaternion<float>;
 extern template class Eigen::Quaternion<double>;
 
-extern template class Sophus::SE3Group<float, 0>;
-extern template class Sophus::SE3Group<double, 0>;
+extern template class Sophus::SE3Group<float,   0>;
+extern template class Sophus::SE3Group<double,  0>;
 
-extern template class Sophus::Sim3Group<float, 0>;
+extern template class Sophus::Sim3Group<float,  0>;
 extern template class Sophus::Sim3Group<double, 0>;

@@ -39,7 +39,7 @@ SE3 SE3CV2Sophus(const cv::Mat &R, const cv::Mat &t)
 		sR(0,i) = R.at<double>(0,i);
 		sR(1,i) = R.at<double>(1,i);
 		sR(2,i) = R.at<double>(2,i);
-		st[i] = t.at<double>(i);
+        st[i]   = t.at<double>(i);
 	}
 
 	return SE3(toSophus(sR.inverse()), toSophus(st));

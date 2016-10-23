@@ -21,32 +21,27 @@ QMAKE_LFLAGS_DEBUG    += -g -funwind-tables -fno-omit-frame-pointer -std=c++11
 #QMAKE_CXXFLAGS += -std=c++11 -fopenmp
 #QMAKE_LFLAGS   += -std=c++11 -fopenmp
 
-SOURCES += \
-    SophusUtil.cpp \
-    globalFuncs.cpp \
-    ImageDisplay_OpenCV.cpp \
-    settings.cpp
+SOURCES +=                                  \
+            src/SophusUtil.cpp              \
+            src/globalFuncs.cpp             \
+#            src/ImageDisplay_OpenCV.cpp     \
+            src/settings.cpp                \
+            src/debugimage/debugimage.cpp   \
+            src/debugimage/opencvdebugimage.cpp
 
-HEADERS += \
-    EigenCoreInclude.h \
-#    IndexThreadReduce.h \
-    settings.h \
-    SophusUtil.h \
-    globalFuncs.h \
-    ImageDisplay.h
+INCLUDEPATH += include/ include/debugimage/
+
+HEADERS +=                                  \
+            include/EigenCoreInclude.h      \
+#           include/IndexThreadReduce.h     \
+            include/settings.h              \
+            include/SophusUtil.h            \
+            include/globalFuncs.h           \
+#            include/ImageDisplay.h          \
+            include/debugimage/debugimage.h \
+            include/debugimage/opnecvdebugimage.h
 
 unix {
-
-    # OpenCV
-#    OPENCV_INCLUDE_PATH        = /home/sergey/libs/opencv-3.0.0/include
-#    OPENCV_INCLUDE_MODULE_PATH = /home/sergey/libs/opencv-3.0.0/release/modules
-
-#    OPENCV_LIBS_PATH           = /home/sergey/libs/opencv-3.0.0/release/lib
-
-#    message( " Unix - Version OpenCV - 3.00 - Release " )
-#    message( $$OPENCV_LIBS_PATH )
-
-##    LIBS    += -L$$OPENCV_LIBS_PATH
     LIBS    += -L/usr/local/lib
 
     LIBS    += -lopencv_objdetect   -lopencv_imgproc
@@ -73,7 +68,6 @@ unix {
     INCLUDEPATH +=  ../lsdSlamGlobalMapping/
     LIBS        +=  -L$$BASE_LIBS_PATH/lsdSlamGlobalMapping  \
 #                    -llsdSlamGlobalMapping
-
 
     #target.path = /usr/lib
     target.path = $$BASE_LIBS_PATH/lsdSlamApp

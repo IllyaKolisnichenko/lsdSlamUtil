@@ -71,17 +71,17 @@ namespace lsd_slam
 
 // Whether to use the gradients of source and target frame for tracking,
 // or only the target frame gradient
-#define USE_ESM_TRACKING 1
+//#define USE_ESM_TRACKING 1
 
-#ifdef ANDROID
-	// tracking pyramid levels.
-        #define MAPPING_THREADS     2
-        #define RELOCALIZE_THREADS  4
-#else
-	// tracking pyramid levels.
-        #define MAPPING_THREADS     4
-        #define RELOCALIZE_THREADS  6
-#endif
+//#ifdef ANDROID
+//	// tracking pyramid levels.
+//        #define MAPPING_THREADS     2
+//        #define RELOCALIZE_THREADS  4
+//#else
+//	// tracking pyramid levels.
+//        #define MAPPING_THREADS     4
+//        #define RELOCALIZE_THREADS  6
+//#endif
 
 #define SE3TRACKING_MIN_LEVEL       1
 #define SE3TRACKING_MAX_LEVEL       5
@@ -94,6 +94,8 @@ namespace lsd_slam
 #define PYRAMID_LEVELS (SE3TRACKING_MAX_LEVEL > SIM3TRACKING_MAX_LEVEL ? SE3TRACKING_MAX_LEVEL : SIM3TRACKING_MAX_LEVEL)
 
 // ============== stereo & gradient calculation ======================
+// All from DethMap
+
 #define MIN_DEPTH                   0.05f // this is the minimal depth tested for stereo.
 
 // particularely important for initial pixel.
@@ -320,54 +322,54 @@ public:
     }
 };
 
-class DenseDepthTrackerSettings
-{
-public:
-    inline DenseDepthTrackerSettings()
-    {
-        // Set default settings
-        if (PYRAMID_LEVELS > 6)
-                printf("WARNING: Sim3Tracker(): default settings are intended for a maximum of 6 levels!");
+//class DenseDepthTrackerSettings
+//{
+//public:
+//    inline DenseDepthTrackerSettings()
+//    {
+//        // Set default settings
+//        if (PYRAMID_LEVELS > 6)
+//                printf("WARNING: Sim3Tracker(): default settings are intended for a maximum of 6 levels!");
 
-        lambdaSuccessFac = 0.5f;
-        lambdaFailFac = 2.0f;
+//        lambdaSuccessFac    = 0.5f;
+//        lambdaFailFac       = 2.0f;
 
-        const float stepSizeMinc[6]     = {1e-8, 1e-8, 1e-8, 1e-8, 1e-8, 1e-8};
-        const int   maxIterations[6]    = {5, 20, 50, 100, 100, 100};
+//        const float stepSizeMinc[6]     = {1e-8, 1e-8, 1e-8, 1e-8, 1e-8, 1e-8};
+//        const int   maxIterations[6]    = {5, 20, 50, 100, 100, 100};
 
 
-        for (int level = 0; level < PYRAMID_LEVELS; ++ level)
-        {
-            lambdaInitial   [level] = 0;
-            stepSizeMin     [level] = stepSizeMinc[level];
-            convergenceEps  [level] = 0.999f;
-            maxItsPerLvl    [level] = maxIterations[level];
-        }
+//        for (int level = 0; level < PYRAMID_LEVELS; ++ level)
+//        {
+//            lambdaInitial   [level] = 0;
+//            stepSizeMin     [level] = stepSizeMinc[level];
+//            convergenceEps  [level] = 0.999f;
+//            maxItsPerLvl    [level] = maxIterations[level];
+//        }
 
-        lambdaInitialTestTrack      = 0;
-        stepSizeMinTestTrack        = 1e-3;
-        convergenceEpsTestTrack     = 0.98;
-        maxItsTestTrack             = 5;
+//        lambdaInitialTestTrack      = 0;
+//        stepSizeMinTestTrack        = 1e-3;
+//        convergenceEpsTestTrack     = 0.98;
+//        maxItsTestTrack             = 5;
 
-        var_weight  = 1.0;
-        huber_d     = 3;
-    }
+//        var_weight  = 1.0;
+//        huber_d     = 3;
+//    }
 
-    float   lambdaSuccessFac;
-    float   lambdaFailFac;
-    float   lambdaInitial   [PYRAMID_LEVELS];
-    float   stepSizeMin     [PYRAMID_LEVELS];
-    float   convergenceEps  [PYRAMID_LEVELS];
-    int     maxItsPerLvl    [PYRAMID_LEVELS];
+//    float   lambdaSuccessFac;
+//    float   lambdaFailFac;
+//    float   lambdaInitial   [PYRAMID_LEVELS];
+//    float   stepSizeMin     [PYRAMID_LEVELS];
+//    float   convergenceEps  [PYRAMID_LEVELS];
+//    int     maxItsPerLvl    [PYRAMID_LEVELS];
 
-    float lambdaInitialTestTrack;
-    float stepSizeMinTestTrack;
-    float convergenceEpsTestTrack;
-    float maxItsTestTrack;
+//    float lambdaInitialTestTrack;
+//    float stepSizeMinTestTrack;
+//    float convergenceEpsTestTrack;
+//    float maxItsTestTrack;
 
-    float huber_d;
-    float var_weight;
-};
+//    float huber_d;
+//    float var_weight;
+//};
 
 extern RunningStats runningStats;
 
