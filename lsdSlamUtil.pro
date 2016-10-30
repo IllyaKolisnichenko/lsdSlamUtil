@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       -= core gui
+QT       += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET      = lsdSlamUtil
 TEMPLATE    = lib
@@ -21,24 +22,26 @@ QMAKE_LFLAGS_DEBUG    += -g -funwind-tables -fno-omit-frame-pointer -std=c++11
 #QMAKE_CXXFLAGS += -std=c++11 -fopenmp
 #QMAKE_LFLAGS   += -std=c++11 -fopenmp
 
-SOURCES +=                                  \
-            src/SophusUtil.cpp              \
-            src/globalFuncs.cpp             \
-#            src/ImageDisplay_OpenCV.cpp     \
-            src/settings.cpp                \
-            src/debugimage/debugimage.cpp   \
+SOURCES +=                                      \
+            src/SophusUtil.cpp                  \
+            src/globalFuncs.cpp                 \
+#            src/ImageDisplay_OpenCV.cpp        \
+            src/settings.cpp                    \
+            src/debugimage/debugimage.cpp       \
+            src/debugimage/qtdebugimage.cpp     \
             src/debugimage/opencvdebugimage.cpp
 
 INCLUDEPATH += include/ include/debugimage/
 
-HEADERS +=                                  \
-            include/EigenCoreInclude.h      \
-#           include/IndexThreadReduce.h     \
-            include/settings.h              \
-            include/SophusUtil.h            \
-            include/globalFuncs.h           \
-#            include/ImageDisplay.h          \
-            include/debugimage/debugimage.h \
+HEADERS +=                                          \
+#            include/EigenCoreInclude.h             \
+#            include/IndexThreadReduce.h             \
+            include/settings.h                      \
+            include/SophusUtil.h                    \
+            include/globalFuncs.h                   \
+#            include/ImageDisplay.h                 \
+            include/debugimage/debugimage.h         \
+            include/debugimage/qtdebugimage.h       \
             include/debugimage/opnecvdebugimage.h
 
 unix {

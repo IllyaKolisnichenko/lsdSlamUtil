@@ -1,5 +1,6 @@
 #include "debugimage/opnecvdebugimage.h"
 
+//***************** Singelton *****************
 openCVDebugImage*           openCVDebugImage::p_instatnceThis = 0;
 openCVDebugImageDestroyer   openCVDebugImage::m_oDestroyer;
 
@@ -13,6 +14,7 @@ void openCVDebugImageDestroyer::initialize(openCVDebugImage *p)
     p_instance = p;
 }
 
+//***************** OpenCV Version *****************
 openCVDebugImage::openCVDebugImage()
 {
 
@@ -37,6 +39,11 @@ int openCVDebugImage::waitKey(int milliseconds)
 {
     // Waiting for pressing buttons
     return cv::waitKey(milliseconds);
+}
+
+void openCVDebugImage::setParentWindow(QMainWindow *parent)
+{
+
 }
 
 void openCVDebugImage::destroyAllwindows()

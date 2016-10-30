@@ -8,11 +8,25 @@
 
 #include <opencv2/opencv.hpp>
 
+class QMainWindow;
+
 class debugImage
 {
+protected:
+    // The structure that describes image
+    struct DisplayImageObject
+    {
+        cv::Mat         img;            // OpenCV image presentation
+        std::string     name;           // The name of the image
+        bool            autoSize;       // Flag for autosize
+    };
+
 public:
     debugImage();
     virtual ~debugImage();
+
+    // Set parent widget
+    virtual void setParentWindow(QMainWindow* parent = 0) = 0;
 
     void displayImage(const char* windowName, const cv::Mat& image, bool autoSize = 0 );
 
@@ -43,11 +57,15 @@ private:
     bool imageThreadKeepRunning;
 
     // Provide data thread safety
-    boost::mutex                    openCVdisplayMutex;
+    boost::mutex                    displayMutex;
     // Conditional variable (probably it generates the signal)
-    boost::condition_variable       openCVdisplaySignal;
+    boost::condition_variable       displaySignal;
     // Pointer to the thread
     boost::thread*                  m_pThread;
+
+protected:
+    // Pointer to parent widget (MainWindow)
+    QMainWindow* parentWidget;
 };
 
 #endif // DEBUGIMAGE_H

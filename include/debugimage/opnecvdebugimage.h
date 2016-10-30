@@ -18,13 +18,6 @@ public:
 
 class openCVDebugImage : public debugImage
 {
-    // The structure that describes image
-    struct DisplayImageObject
-    {
-        cv::Mat         img;            // OpenCV image presentation
-        std::string     name;           // The name of the image
-        bool            autoSize;       // Flag for autosize
-    };
 
 protected:
     openCVDebugImage();
@@ -42,6 +35,9 @@ private:
 public:
     static openCVDebugImage* getInstance();
     virtual int waitKey(  int milliseconds );
+
+    // Set parent widget
+    virtual void setParentWindow(QMainWindow* parent = 0);
 
 protected:
     virtual void addNewImageInstance( const char *windowName, const cv::Mat &image, bool autoSize);

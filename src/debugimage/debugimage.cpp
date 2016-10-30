@@ -15,11 +15,11 @@ debugImage::~debugImage()
         join();
 
     std::cout << "debugImage::~debugImage(): Destructor Done.."  << std::endl;
-
 }
 
 void debugImage::displayImage(const char *windowName, const cv::Mat &image, bool autoSize)
 {
+    std::cout << "debugImage::displayImage() .."  << std::endl;
     if( useImageDisplayThread )
     {
         // If thread wasn't started yet
@@ -27,13 +27,14 @@ void debugImage::displayImage(const char *windowName, const cv::Mat &image, bool
             run();        // Run the thread
 
         // Lock an access to the data
-        boost::unique_lock<boost::mutex> lock(openCVdisplayMutex);
+        boost::unique_lock<boost::mutex> lock(displayMutex);
 
         // Add new image instance
         addNewImageInstance( windowName, image, autoSize );
 
         // If there are thread that are waiting for being unlocked than one of them will be unlocked
-        openCVdisplaySignal.notify_one();
+        displaySignal.notify_one();
+        std::cout << "openCVdisplaySignal.notify_one() .."  << std::endl;
     }
     else
     {
@@ -49,7 +50,7 @@ void debugImage::destroyAllwindows()
 void debugImage::closeAllWindows()
 {
     // Lock an access to the data
-    boost::unique_lock<boost::mutex> lock(openCVdisplayMutex);
+    boost::unique_lock<boost::mutex> lock(displayMutex);
 
     if( useImageDisplayThread )
     {
@@ -59,7 +60,7 @@ void debugImage::closeAllWindows()
             // Stop the thread
             imageThreadKeepRunning = false;
             // Notify all
-            openCVdisplaySignal.notify_all();
+            displaySignal.notify_all();
             // Message "Thread finish"
             printf( "debugImage::closeAllWindows(): Waiting for image display thread to end!\n");
 
@@ -143,13 +144,16 @@ void debugImage::displayThreadLoop()
     printf("debugImage::displayThreadLoop(): Started image display thread!\n");
 
     // Set the mutex for the thread
-    boost::unique_lock<boost::mutex> lock( openCVdisplayMutex );
+    boost::unique_lock<boost::mutex> lock( displayMutex );
 
     // While we need threads of images
     while( imageThreadKeepRunning )
     {
+        std::cout << "displaySignal.wait( lock ).. Data Waiting .."  << std::endl;
         // Stop the thread until we receive new data
-        openCVdisplaySignal.wait( lock );
+//        displaySignal.wait( lock );
+        displaySignal.timed_wait( lock, boost::posix_time::milliseconds(300) );
+        std::cout << "displaySignal.wait( lock ).. Data received"  << std::endl;
 
         // If we need to pause the thread
         if(!imageThreadKeepRunning)
