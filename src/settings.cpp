@@ -63,9 +63,9 @@ bool printThreadingInfo = true;
 bool printMappingTiming = false;
 bool printOverallTiming = false;
 
-bool plotTrackingIterationInfo      = true;
-bool plotSim3TrackingIterationInfo  = true;
-bool plotStereoImages               = true;     // ploting stereo image reconstruct
+bool plotTrackingIterationInfo      = false;
+bool plotSim3TrackingIterationInfo  = false;
+bool plotStereoImages               = false;     // ploting stereo image reconstruct
 bool plotTracking                   = false;
 
 
@@ -152,7 +152,6 @@ void handleKey(char k)
             manualTrackingLossIndicated = true;
             break;
         }
-
 }
 
 }

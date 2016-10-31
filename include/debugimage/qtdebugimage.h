@@ -1,7 +1,9 @@
 #ifndef QTDEBUGIMAGE_H
 #define QTDEBUGIMAGE_H
 
-#include <QObject>
+#include <QThread>
+#include <QMutex>
+#include <QWaitCondition>
 
 #include "debugimage.h"
 
@@ -17,24 +19,46 @@ public:
     void initialize( QtDebugImage* p );
 };
 
-class QtDebugImage : public QObject, public debugImage
+class QtDebugImage : public QThread, public DebugImage
 {
     Q_OBJECT
 public:
     // Set parent widget
     virtual void setParentWindow(QMainWindow* parent = 0);
 
+    // Add image
+    virtual void displayImage(  const   char*       windowName,
+                                const   cv::Mat&    image,
+                                        bool        autoSize = 0 );
+
+    virtual void closeAllWindows();
+
+    // Wait some key
+    virtual int waitKey(  int milliseconds );
+
 protected:
     // Constructor
     QtDebugImage();
     QtDebugImage( const QtDebugImage& );
     QtDebugImage& operator=( QtDebugImage& );
-
     // Destructor
     virtual ~QtDebugImage();
 
+    virtual void showImage( const   char*       windowName,
+                            const   cv::Mat&    image,
+                                    bool        autoSize    );
+
+    virtual void destroyAllwindows();
+
+    // Get instance of pointer
+    static QtDebugImage* getInstance();
+
     // Class for Singelton Tempate
     friend class QtDebugImageDestroyer;
+    friend class DebugImage;
+
+protected:
+    virtual void run();
 
 private:
     // Singelton instace pointer
@@ -42,36 +66,15 @@ private:
     // Destroyer exemple
     static QtDebugImageDestroyer    m_oDestroyer;
 
-public:
-    // Get instance of pointer
-    static QtDebugImage* getInstance();
-    virtual int waitKey(  int milliseconds );
-
-public slots:
-    // Slot for append new widget
-    void appendWidgetSlot(  QString& qName, bool autoSize );
-
-signals:
-    // Need append new widget
-    void needNewWidgetSignal( QString& qName, bool autoSize );
+private:
+    // Pointer to parent widget (MainWindow)
+    QMainWindow* parentWidget;
 
 protected:
-    virtual void addNewImageInstance( const char *windowName, const cv::Mat &image, bool autoSize);
-
-    virtual void showImage(const char* windowName, const cv::Mat& image, bool autoSize);
-
-    virtual void loopIteration();
-
-    virtual void destroyAllwindows();
-
-private:
-    // Indigested list of all opened windows described as std::string
-    std::unordered_set<std::string> openWindows;
-    // Array of images
-    std::vector<DisplayImageObject> displayQueue;
-
-    // Temp struct for new widget
-    DisplayImageObject m_pNewWidget;
+    // Provide data thread safety
+    QMutex          displayMutex;
+    // Conditional variable (probably it generates the signal)
+    QWaitCondition  displaySignal;
 };
 
 #endif // QTDEBUGIMAGE_H

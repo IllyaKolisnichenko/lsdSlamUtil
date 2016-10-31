@@ -4,13 +4,13 @@
 #include <string>
 #include <unordered_set>
 
-#include <boost/thread.hpp>
+//#include <boost/thread.hpp>
 
 #include <opencv2/opencv.hpp>
 
 class QMainWindow;
 
-class debugImage
+class DebugImage
 {
 protected:
     // The structure that describes image
@@ -22,50 +22,55 @@ protected:
     };
 
 public:
-    debugImage();
-    virtual ~debugImage();
+    // Debug ID
+    enum DebugImage_ID {  None, OpenCV_ID, Qt_ID };
 
     // Set parent widget
     virtual void setParentWindow(QMainWindow* parent = 0) = 0;
 
-    void displayImage(const char* windowName, const cv::Mat& image, bool autoSize = 0 );
+    // Add image
+    virtual void displayImage(  const   char*       windowName,
+                                const   cv::Mat&    image,
+                                        bool        autoSize = 0 );
 
-    void closeAllWindows();
+    /// !!!! Make RESET() function
+    virtual void closeAllWindows()=0;
 
-    void    run();
-    void    join();
-    void    stop();
+    // Wait some key
+    virtual int  waitKey(  int milliseconds );
 
-    virtual int waitKey(  int milliseconds );
+    // Change type
+    static void setType( DebugImage_ID type );
+    // Get instance of pointer
+    static DebugImage* getInstance();
 
 protected:
-    virtual void addNewImageInstance(const char *windowName, const cv::Mat &image, bool autoSize);
-    virtual void showImage(const char* windowName, const cv::Mat& image, bool autoSize);
+    DebugImage();
+    virtual ~DebugImage();
 
-    virtual void loopIteration();
+    // Realy show image
+    virtual void showImage          ( const char*       windowName,
+                                      const cv::Mat     &image,
+                                            bool        autoSize = true   );
 
+    // Destroy all windows
     virtual void destroyAllwindows();
 
-private:
-    // Function is called in the thread loop
-    void displayThreadLoop();
-
-private:
+protected:
     // Flag of thread usage
     bool useImageDisplayThread;
-    // Changing of value causes thread stop and all windows closing
+    // Flag for stop image thread
     bool imageThreadKeepRunning;
 
-    // Provide data thread safety
-    boost::mutex                    displayMutex;
-    // Conditional variable (probably it generates the signal)
-    boost::condition_variable       displaySignal;
-    // Pointer to the thread
-    boost::thread*                  m_pThread;
+    // Indigested list of all opened windows described as std::string
+    std::unordered_set<std::string> openWindows;
+    // Array of images
+    std::vector<DisplayImageObject> displayQueue;
 
-protected:
-    // Pointer to parent widget (MainWindow)
-    QMainWindow* parentWidget;
+private:
+    // Type for all instances
+    static DebugImage_ID   m_eType;
+
 };
 
 #endif // DEBUGIMAGE_H
