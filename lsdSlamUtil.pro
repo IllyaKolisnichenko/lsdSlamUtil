@@ -53,26 +53,17 @@ unix {
 #    LIBS    += -lopencv_features2d  -lopencv_calib3d
 #    LIBS    += -lopencv_imgcodecs
 
-#    INCLUDEPATH += /home/sergey/libs/Sophus
-
     PKGCONFIG = gtk+-2.0
     CONFIG += link_pkgconfig
 
     BASE_LIBS_PATH = $$PWD/../build
 
-    INCLUDEPATH +=  ../lsdSlamIO/
-    LIBS        +=  -L$$BASE_LIBS_PATH/lsdSlamIO     \
-                    -llsdSlamIO
-
     INCLUDEPATH +=  ../lsdSlamFrame/
     LIBS        +=  -L$$BASE_LIBS_PATH/lsdSlamFrame  \
-                    -llsdSlamFrame
 
     INCLUDEPATH +=  ../lsdSlamGlobalMapping/
     LIBS        +=  -L$$BASE_LIBS_PATH/lsdSlamGlobalMapping  \
-#                    -llsdSlamGlobalMapping
 
-    #target.path = /usr/lib
     target.path = $$BASE_LIBS_PATH/lsdSlamApp
     INSTALLS += target
 }

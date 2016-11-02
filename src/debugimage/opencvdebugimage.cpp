@@ -17,7 +17,7 @@ void openCVDebugImageDestroyer::initialize(openCVDebugImage *p)
 //***************** OpenCV Version *****************
 void openCVDebugImage::displayImage(const char *windowName, const cv::Mat &image, bool autoSize)
 {
-    std::cout << "openCVDebugImage::displayImage() .."  << std::endl;
+    std::cout << "openCVDebugImage::displayImage(): Try to append new image.."  << std::endl;
 
     // If need to run thread
     if( useImageDisplayThread )
@@ -31,7 +31,7 @@ void openCVDebugImage::displayImage(const char *windowName, const cv::Mat &image
             ///
         }
         // Lock an access to the data
-        boost::unique_lock<boost::mutex> lock(displayMutex);
+        boost::unique_lock<boost::mutex> lock( displayMutex );
 
         // Add new instance of the image object
         displayQueue.push_back(DisplayImageObject());
@@ -43,7 +43,7 @@ void openCVDebugImage::displayImage(const char *windowName, const cv::Mat &image
 
         // If there are thread that are waiting for being unlocked than one of them will be unlocked
         displaySignal.notify_one();
-        std::cout << "displaySignal.notify_one() .."  << std::endl;
+        std::cout << std::endl << "SIGNAL: New Data Struct was append .."  << std::endl << std::endl;
     }
     else
     {
@@ -178,8 +178,9 @@ void openCVDebugImage::displayThreadLoop()
         std::cout << "displaySignal.wait( lock ).. Data Waiting .."  << std::endl;
 
         // Stop the thread until we receive new data
-//        displaySignal.wait( lock );
-        displaySignal.timed_wait( lock, boost::posix_time::milliseconds(300) );
+        displaySignal.wait( lock );
+//        displaySignal.timed_wait( lock, boost::posix_time::milliseconds(300) );
+
         std::cout << "displaySignal.wait( lock ).. Data received"  << std::endl;
 
         // If we need to pause the thread
@@ -208,7 +209,7 @@ void openCVDebugImage::displayThreadLoop()
 
 void openCVDebugImage::showImage(const char *windowName, const cv::Mat &image, bool autoSize)
 {
-    std::cout << "openCVDebugImage::showImage().."  << std::endl;
+    std::cout << "openCVDebugImage::showImage(): Show  Image ..."  << std::endl;
 
     // Make new window if necessary
     //  If parameter is not set

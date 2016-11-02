@@ -61,27 +61,36 @@ void printMessageOnCVImage(cv::Mat &image, std::string line1,std::string line2)
 
 cv::Mat getDepthRainbowPlot(Frame* kf, int lvl)
 {
-	return getDepthRainbowPlot(kf->idepth(lvl), kf->idepthVar(lvl), kf->image(lvl),
-			kf->width(lvl), kf->height(lvl));
+    return getDepthRainbowPlot( kf->idepth(lvl),
+                                kf->idepthVar(lvl),
+                                kf->image(lvl),
+                                kf->width(lvl),
+                                kf->height(lvl)     );
 }
 
-cv::Mat getDepthRainbowPlot(const float* idepth, const float* idepthVar, const float* gray, int width, int height)
+cv::Mat getDepthRainbowPlot(    const   float*  idepth,
+                                const   float*  idepthVar,
+                                const   float*  gray,
+                                        int     width,
+                                        int     height  )
 {
 	cv::Mat res = cv::Mat(height,width,CV_8UC3);
+
 	if(gray != 0)
 	{
-		cv::Mat keyFrameImage(height, width, CV_32F, const_cast<float*>(gray));
+        cv::Mat keyFrameImage( height, width, CV_32F, const_cast<float*>(gray) );
 		cv::Mat keyFrameImage8u;
+
 		keyFrameImage.convertTo(keyFrameImage8u, CV_8UC1);
 		cv::cvtColor(keyFrameImage8u, res, CV_GRAY2RGB);
 	}
 	else
 		fillCvMat(&res,cv::Vec3b(255,170,168));
 
-	for(int i=0;i<width;i++)
-		for(int j=0;j<height;j++)
+    for( int i = 0; i < width; i++ )
+        for(int j = 0; j < height; j++ )
 		{
-			float id = idepth[i + j*width];
+            float id = idepth[i + j * width];
 
 			if(id >=0 && idepthVar[i + j*width] >= 0)
 			{
@@ -100,7 +109,11 @@ cv::Mat getDepthRainbowPlot(const float* idepth, const float* idepthVar, const f
 		}
 	return res;
 }
-cv::Mat getVarRedGreenPlot(const float* idepthVar, const float* gray, int width, int height)
+
+cv::Mat getVarRedGreenPlot( const   float*  idepthVar,
+                            const   float*  gray,
+                                    int     width,
+                                    int     height      )
 {
 	float* idepthVarExt = (float*)Eigen::internal::aligned_malloc(width*height*sizeof(float));
 

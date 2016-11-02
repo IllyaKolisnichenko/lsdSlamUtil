@@ -3,12 +3,12 @@
 #include "debugimage/qtdebugimage.h"
 
 DebugImage::DebugImage_ID
-DebugImage::m_eType = DebugImage::None;
+        DebugImage::m_eType = DebugImage::None;
+
+bool    DebugImage::useImageDisplayThread = false;
 
 DebugImage::DebugImage() :
-        useImageDisplayThread   ( true      ),
         imageThreadKeepRunning  ( true      )
-//        m_eType                 ( None )
 {
     openWindows.clear();
     displayQueue.clear();
@@ -30,6 +30,11 @@ void DebugImage::setType(DebugImage_ID type)
 {
     m_eType = type;
     /// TODO: Close All Windows !!!
+}
+
+void DebugImage::setThreadUsage( bool useThread )
+{
+    useImageDisplayThread = useThread;
 }
 
 void DebugImage::destroyAllwindows()

@@ -41,6 +41,9 @@ public:
 
     // Change type
     static void setType( DebugImage_ID type );
+    // Using image thread
+    static void setThreadUsage( bool useThread );
+
     // Get instance of pointer
     static DebugImage* getInstance();
 
@@ -58,7 +61,7 @@ protected:
 
 protected:
     // Flag of thread usage
-    bool useImageDisplayThread;
+    static bool useImageDisplayThread;
     // Flag for stop image thread
     bool imageThreadKeepRunning;
 
