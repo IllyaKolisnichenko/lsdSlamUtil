@@ -4,8 +4,6 @@
 #include <string>
 #include <unordered_set>
 
-//#include <boost/thread.hpp>
-
 #include <opencv2/opencv.hpp>
 
 class QMainWindow;

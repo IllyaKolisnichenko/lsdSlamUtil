@@ -34,7 +34,7 @@ SE3 SE3CV2Sophus(const cv::Mat &R, const cv::Mat &t)
 	Sophus::Matrix3f sR;
 	Sophus::Vector3f st;
 
-	for(int i=0;i<3;i++)
+    for( int i = 0;i < 3; i++ )
 	{
 		sR(0,i) = R.at<double>(0,i);
 		sR(1,i) = R.at<double>(1,i);

@@ -59,14 +59,14 @@ bool printConstraintSearchInfo  = false;
 bool printOptimizationInfo      = false;
 bool printRelocalizationInfo    = false;
 
-bool printThreadingInfo = true;
+bool printThreadingInfo = true;             // Tracking part
 bool printMappingTiming = false;
 bool printOverallTiming = false;
 
-bool plotTrackingIterationInfo      = false;
+bool plotTrackingIterationInfo      = true; // Tracking part
 bool plotSim3TrackingIterationInfo  = false;
 bool plotStereoImages               = false;     // ploting stereo image reconstruct
-bool plotTracking                   = false;
+bool plotTracking                   = true;
 
 
 float freeDebugParam1 = 1;

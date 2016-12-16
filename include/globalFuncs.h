@@ -68,21 +68,24 @@ inline Eigen::Vector3f getInterpolatedElement43( const Eigen::Vector4f* const   
                                                  const float                    y,
                                                  const int                      width   )
 {
+    // convert to int (pixel on image)
     int   ix = (int)x;
     int   iy = (int)y;
 
+    // calculate difference (error)
 	float dx = x - ix;
 	float dy = y - iy;
 
+    // gradient ?
     float dxdy = dx * dy;
 
     // Calculate adress for pixel in Vector Buffer
-    const Eigen::Vector4f* bp = mat + ix + iy * width;
+    const Eigen::Vector4f* pBuf = mat + ix + iy * width;
 
-    return      dxdy            *   *(const Eigen::Vector3f*)(bp + width + 1)
-            + (dy-dxdy)         *   *(const Eigen::Vector3f*)(bp + width)
-            + (dx-dxdy)         *   *(const Eigen::Vector3f*)(bp + 1)
-            + (1-dx-dy+dxdy)    *   *(const Eigen::Vector3f*)(bp);
+    return      dxdy            *   *(const Eigen::Vector3f*)(pBuf + width + 1)     // Element upper + 1
+            + (dy-dxdy)         *   *(const Eigen::Vector3f*)(pBuf + width)         // Element upper
+            + (dx-dxdy)         *   *(const Eigen::Vector3f*)(pBuf + 1)             // Next element
+            + (1-dx-dy+dxdy)    *   *(const Eigen::Vector3f*)(pBuf);                // Current pixel
 }
 
 inline Eigen::Vector4f getInterpolatedElement44(const Eigen::Vector4f* const mat, const float x, const float y, const int width)
